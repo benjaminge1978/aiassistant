@@ -34,22 +34,24 @@ pdf(dataBuffer).then(function(data) {
 
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
+// Assuming 'openai' is correctly initialized with your API key
 async function getOpenAIResponse(question) {
     const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
   
     try {
-        const response = await openai.createCompletion({
-            model: "gpt-3.5-turbo-16k", // Replace with your model of choice
-            prompt: prompt,
-            max_tokens: 150
-        });
+      const completion = await openai.completions.create({
+        model: "text-davinci-003", // Replace with your model of choice
+        prompt: prompt,
+        max_tokens: 150
+      });
   
-        return response.choices[0].text.trim(); // Corrected line
+      return completion.choices[0].text.trim();
     } catch (error) {
-        console.error('Error calling OpenAI API:', error);
-        return "I'm sorry, I encountered an error while fetching the response.";
+      console.error('Error calling OpenAI API:', error);
+      return "I'm sorry, I encountered an error while fetching the response.";
     }
-}
+  }
+  
 
 io.on('connection', (socket) => {
   socket.on('disconnect', () => {
