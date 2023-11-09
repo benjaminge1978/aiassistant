@@ -39,7 +39,7 @@ async function getOpenAIResponse(question) {
   
     try {
         const response = await openai.createCompletion({
-        model: "text-davinci-003", // Replace with your model of choice
+        model: "gpt-3.5-turbo-16k", // Replace with your model of choice
         prompt: prompt,
         max_tokens: 150
       });
