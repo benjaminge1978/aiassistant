@@ -33,22 +33,22 @@ pdf(dataBuffer).then(function(data) {
 });
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY // This is also the default, can be omitted
 });
 
 async function getOpenAIResponse(question) {
   const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
 
   try {
-    const response = await openai.completions.create({
-      model: "gpt-4-1106-preview", // Replace with your model of choice
+    const response = await openai.createCompletion({
+      model: "text-davinci-003", // Replace with your model of choice
       prompt: prompt,
       max_tokens: 150
     });
 
-    return response.choices[0].text.trim();
+    return response.data.choices[0].text.trim();
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
+    console.error('Error calling OpenAI API:', error.message);
     return "I'm sorry, I encountered an error while fetching the response.";
   }
 }
