@@ -41,7 +41,7 @@ async function getOpenAIResponse(question) {
 
   try {
     const response = await openai.Completions.create({
-      model: "gpt-4-1106-preview", // Replace with your model of choice
+      model: "text-davinci-003", // Replace with your model of choice
       prompt: prompt,
       max_tokens: 150
     });
