@@ -1,15 +1,18 @@
-require('dotenv').config();
-const express = require('express');
-const { OpenAI } = require('openai');
-const pdf = require('pdf-parse');
-const fs = require('fs');
-const http = require('http');
-const path = require('path');
-const socketIO = require('socket.io');
+import dotenv from 'dotenv';
+import express from 'express';
+import { createReadStream } from 'fs';
+import http from 'http';
+import { join } from 'path';
+import { Server } from 'socket.io';
+import pdf from 'pdf-parse';
+import OpenAI from 'openai';
+
+// Initialize dotenv to use environment variables
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server, {
+const io = new Server(server, {
   cors: {
     origin: "*", // or specify your Netlify URL for security
     methods: ["GET", "POST"]
@@ -19,12 +22,12 @@ const io = socketIO(server, {
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
 const pdfPath = 'docs/kjopsguide.pdf';
 let pdfText = '';
-let dataBuffer = fs.readFileSync(pdfPath);
+let dataBuffer = createReadStream(pdfPath);
 
 pdf(dataBuffer).then(function(data) {
   pdfText = data.text;
@@ -40,13 +43,13 @@ async function getOpenAIResponse(question) {
   const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
 
   try {
-    const response = await openai.Completions.create({
+    const response = await openai.completions.create({
       model: "text-davinci-003", // Replace with your model of choice
       prompt: prompt,
       max_tokens: 150
     });
 
-    return response.data.choices[0].text.trim();
+    return response.choices[0].text.trim();
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
     return "I'm sorry, I encountered an error while fetching the response.";
