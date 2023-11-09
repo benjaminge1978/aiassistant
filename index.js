@@ -37,13 +37,20 @@ const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 // Assuming 'openai' is correctly initialized with your API key
 async function getOpenAIResponse(question) {
-    const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
+    // Truncate the prompt if it's too long
+    let truncatedPdfText = pdfText;
+    const maxPromptLength = 4000; // Adjust this number based on your needs
+    if (pdfText.length > maxPromptLength) {
+      truncatedPdfText = pdfText.substring(0, maxPromptLength) + "...";
+    }
+  
+    const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${truncatedPdfText}\n\nThe answer is:`;
   
     try {
       const completion = await openai.completions.create({
-        model: "text-davinci-003", // Replace with your model of choice
+        model: "text-davinci-003",
         prompt: prompt,
-        max_tokens: 150
+        max_tokens: 100 // Reduced number of tokens for the completion
       });
   
       return completion.choices[0].text.trim();
