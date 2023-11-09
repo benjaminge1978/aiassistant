@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { OpenAIApi } = require('openai');
+const { OpenAI } = require('openai');
 const pdf = require('pdf-parse');
 const fs = require('fs');
 const http = require('http');
@@ -32,8 +32,8 @@ pdf(dataBuffer).then(function(data) {
   console.error('Error reading PDF:', err);
 });
 
-const openai = new OpenAIApi({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY // This can be omitted if you've set OPENAI_API_KEY in your environment variables
 });
 
 async function getOpenAIResponse(question) {
@@ -46,7 +46,7 @@ async function getOpenAIResponse(question) {
       max_tokens: 150
     });
 
-    return response.choices[0].text.trim();
+    return response.data.choices[0].text.trim();
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
     return "I'm sorry, I encountered an error while fetching the response.";
