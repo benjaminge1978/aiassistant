@@ -38,11 +38,31 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 async function getOpenAIResponse(question) {
-  // ... your OpenAI API call and response handling ...
+  const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
+
+  try {
+    const response = await openai.createCompletion({
+      model: "gpt-4-1106-preview", // Replace with your model of choice
+      prompt: prompt,
+      max_tokens: 150
+    });
+
+    return response.data.choices[0].text.trim();
+  } catch (error) {
+    console.error('Error calling OpenAI API:', error);
+    return "I'm sorry, I encountered an error while fetching the response.";
+  }
 }
 
 io.on('connection', (socket) => {
-  // ... your socket.io event handling ...
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+
+  socket.on('chat message', async (msg) => {
+    const answer = await getOpenAIResponse(msg);
+    socket.emit('chat message', { question: msg, answer });
+  });
 });
 
 const PORT = process.env.PORT || 3000;
