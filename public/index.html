@@ -3,20 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Interface</title>
+    <title>Read Pureservice PDF - GPT Chatbot Interface</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background: #3a3a3a;
             margin: 0;
             padding: 0;
+        }
+
+        .top-section {
+            display:flex;
+            margin:0 auto;
+            max-width:600px;
+            padding: 20px;
+            align-items: center;
+        }
+        .book-cover img {
+            width: 100px;
+            text-align:right;
+        }
+.ts-left {
+    padding: 20px;
+}
+
+.ts-right {
+    padding: 20px;
+}
+        h1 {
+            color:#fff;
+            font-size: 22px;
+        }
+        h3 {
+            color:#fff;
         }
         #chat-container {
             display: flex;
             flex-direction: column;
             max-width: 600px;
             margin: 0 auto;
-            height: 90vh;
+            height: 60vh;
         }
         #messages {
             flex-grow: 1;
@@ -56,12 +82,28 @@
     </style>
 </head>
 <body>
+    <div class="top-section">
+        <div class="ts-left">
+    <div class="title">
+        <h1>Hey! I'm you're AI assistant. :)</h1>
+        <h3>You can ask me anything about this ebook</h3>
+    </div>
+    </div>
+    <div class="ts-right">
+    <div id="chat-image-container">
+        <div class="book-cover">
+            <img src="/img/cover.jpg" alt="cover">
+        </div>
+    </div>
+</div>
+</div>
     <div id="chat-container">
-        <ul id="messages"></ul>
         <form id="chat-form" action="">
-            <input id="chat-input" type="text" autocomplete="off" placeholder="Ask me anything...">
+            <input id="chat-input" type="text" autocomplete="off" placeholder="Ask me anything about this ebook :)">
             <button id="send-button" type="submit">Send</button>
         </form>
+        <ul id="messages"></ul>
+
     </div>
 
     <!-- Replace with the URL of your Heroku app where socket.io is served -->
