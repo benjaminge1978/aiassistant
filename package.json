@@ -1,7 +1,7 @@
 {
   "name": "aiassistant",
   "version": "1.0.0",
-  "description": "help pureservice",
+  "description": "An AI assistant application",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
