@@ -64,11 +64,10 @@
         </form>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <!-- Replace with the URL of your Heroku app where socket.io is served -->
+    <script src="https://glacial-wave-04429-ba58e7e4aba3.herokuapp.com/socket.io/socket.io.js"></script>
     <script>
-        // If you have added the environment variable in Netlify to configure the backend URL,
-        // use it here. Otherwise, replace 'https://your-heroku-app-name.herokuapp.com' with the actual URL.
-        // Make sure there is no trailing slash in the URL.
+        // Replace with the URL of your Heroku app
         const BACKEND_URL = 'https://glacial-wave-04429-ba58e7e4aba3.herokuapp.com';
 
         // Initialize the socket connection to the backend server
@@ -90,7 +89,7 @@
             const item = document.createElement('li');
             item.textContent = `Q: ${data.question} - A: ${data.answer}`;
             messages.appendChild(item);
-            messages.scrollTop = messages.scrollHeight;
+            window.scrollTo(0, document.body.scrollHeight);
         });
     </script>
 </body>
