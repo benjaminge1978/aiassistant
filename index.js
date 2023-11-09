@@ -39,15 +39,15 @@ async function getOpenAIResponse(question) {
   
     try {
         const response = await openai.createCompletion({
-        model: "gpt-3.5-turbo-16k", // Replace with your model of choice
-        prompt: prompt,
-        max_tokens: 150
-      });
+            model: "gpt-3.5-turbo-16k", // Replace with your model of choice
+            prompt: prompt,
+            max_tokens: 150
+        });
   
-      return response.data.choices[0].text.trim();
+        return response.choices[0].text.trim(); // Corrected line
     } catch (error) {
-      console.error('Error calling OpenAI API:', error);
-      return "I'm sorry, I encountered an error while fetching the response.";
+        console.error('Error calling OpenAI API:', error);
+        return "I'm sorry, I encountered an error while fetching the response.";
     }
 }
 
