@@ -32,6 +32,7 @@ pdf(dataBuffer).then(function(data) {
   console.error('Error reading PDF:', err);
 });
 
+
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 // Assuming 'openai' is correctly initialized with your API key
