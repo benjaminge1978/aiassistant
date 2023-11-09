@@ -64,11 +64,14 @@
         </form>
     </div>
 
-    <!-- Point this script to the socket.io client library served by your Heroku app -->
+    <!-- Replace with the URL of your Heroku app where socket.io is served -->
     <script src="https://glacial-wave-04429-ba58e7e4aba3.herokuapp.com/socket.io/socket.io.js"></script>
     <script>
+        // Replace with the URL of your Heroku app
+        const BACKEND_URL = 'https://glacial-wave-04429-ba58e7e4aba3.herokuapp.com';
+
         // Initialize the socket connection to the backend server
-        const socket = io('https://glacial-wave-04429-ba58e7e4aba3.herokuapp.com');
+        const socket = io(BACKEND_URL);
 
         const form = document.getElementById('chat-form');
         const input = document.getElementById('chat-input');
