@@ -1,14 +1,11 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import { createReadStream } from 'fs';
-import http from 'http';
-import { join } from 'path';
-import { Server } from 'socket.io';
-import pdf from 'pdf-parse';
-import OpenAI from 'openai';
-
-// Initialize dotenv to use environment variables
-dotenv.config();
+require('dotenv').config();
+const express = require('express');
+const { Server } = require("socket.io");
+const OpenAI = require('openai').default;
+const pdf = require('pdf-parse');
+const fs = require('fs');
+const http = require('http');
+const { join } = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -27,7 +24,7 @@ app.get('/', (req, res) => {
 
 const pdfPath = 'docs/kjopsguide.pdf';
 let pdfText = '';
-let dataBuffer = createReadStream(pdfPath);
+let dataBuffer = fs.readFileSync(pdfPath);
 
 pdf(dataBuffer).then(function(data) {
   pdfText = data.text;
@@ -35,16 +32,14 @@ pdf(dataBuffer).then(function(data) {
   console.error('Error reading PDF:', err);
 });
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY // This can be omitted if you've set OPENAI_API_KEY in your environment variables
-});
+const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 async function getOpenAIResponse(question) {
   const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
 
   try {
-    const response = await openai.completions.create({
-      model: "text-davinci-003", // Replace with your model of choice
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
       prompt: prompt,
       max_tokens: 150
     });
