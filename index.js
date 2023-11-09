@@ -1,8 +1,7 @@
-const { OpenAI } = require('openai');
 require('dotenv').config();
 const express = require('express');
 const { Server } = require("socket.io");
-const OpenAI = require('openai').default;
+const { OpenAI } = require('openai'); // Corrected import
 const pdf = require('pdf-parse');
 const fs = require('fs');
 const http = require('http');
