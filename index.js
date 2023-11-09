@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 const pdf = require('pdf-parse');
 const fs = require('fs');
 const http = require('http');
@@ -32,22 +32,21 @@ pdf(dataBuffer).then(function(data) {
   console.error('Error reading PDF:', err);
 });
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 async function getOpenAIResponse(question) {
   const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
 
   try {
-    const response = await openai.createCompletion({
+    const response = await openai.completions.create({
       model: "gpt-4-1106-preview", // Replace with your model of choice
       prompt: prompt,
       max_tokens: 150
     });
 
-    return response.data.choices[0].text.trim();
+    return response.choices[0].text.trim();
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
     return "I'm sorry, I encountered an error while fetching the response.";
