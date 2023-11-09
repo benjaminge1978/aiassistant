@@ -1,3 +1,4 @@
+const { OpenAI } = require('openai');
 require('dotenv').config();
 const express = require('express');
 const { Server } = require("socket.io");
@@ -38,7 +39,7 @@ async function getOpenAIResponse(question) {
     const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
   
     try {
-      const response = await openai.Completion.create({
+        const response = await openai.Completion.create({
         model: "text-davinci-003", // Replace with your model of choice
         prompt: prompt,
         max_tokens: 150
