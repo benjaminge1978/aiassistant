@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const { Server } = require("socket.io");
-const { Configuration, OpenAIApi } = require('openai');
+const { OpenAI } = require('openai'); // Corrected import
 const pdf = require('pdf-parse');
 const fs = require('fs');
 const http = require('http');
@@ -32,11 +32,7 @@ pdf(dataBuffer).then(function(data) {
   console.error('Error reading PDF:', err);
 });
 
-// Set up configuration for OpenAI
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 async function getOpenAIResponse(question) {
     const prompt = `The following is a question from a user:\n"${question}"\n\nThe context from the PDF is as follows:\n${pdfText}\n\nThe answer is:`;
@@ -53,7 +49,7 @@ async function getOpenAIResponse(question) {
       console.error('Error calling OpenAI API:', error);
       return "I'm sorry, I encountered an error while fetching the response.";
     }
-  }
+}
 
 io.on('connection', (socket) => {
   socket.on('disconnect', () => {
